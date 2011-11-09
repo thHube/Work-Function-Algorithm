@@ -10,10 +10,13 @@
 
 /**
  * Initialize the algorithm allocating the initial configuration.
+ * @param limit The superior limit for first iteration. Should be greater 
+ * that the eligble space. 
  */
-WorkFunctionAlgorithm::WorkFunctionAlgorithm()
+WorkFunctionAlgorithm::WorkFunctionAlgorithm(range_t limit)
 {
     _currentConf = ConfigurationFactory::get().createInitialConfiguration();
+    _limit = limit;
 }
 
 /**
@@ -26,21 +29,15 @@ void WorkFunctionAlgorithm::processRequest(Point* request)
     _requests.push_back(request);
     size_t t = _requests.size();
     range_t minDistance, actualDistance;
-    Configuration::Iterator it = _currentConf->begin();
-    Configuration::Iterator servant = it;
-    
-    // -- Calculate the first minimum iteration --------------------------------
-    Configuration* conf = _currentConf->newFromSwap(it, *request);
-    minDistance = work(t - 1, conf) + (*it).distance(*request);
-    ConfigurationFactory::get().recycle(conf);
-    
-    ++it;
+    Configuration::Iterator it, servant;
+    Configuration* conf;
+    minDistance = _limit;
     
     // -- Minimize distance work(t, conf) --------------------------------------
-    for(; it != _currentConf->end(); ++it)
+    for(it = _currentConf->begin(); it != _currentConf->end(); ++it)
     {
+        std::cout << " - " << it.getServerNumber() << std::endl;
         conf = _currentConf->newFromSwap(it, *request);
-        
         actualDistance = work(t - 1, conf) + (*it).distance(*request);
         ConfigurationFactory::get().recycle(conf);
         
@@ -59,7 +56,7 @@ void WorkFunctionAlgorithm::processRequest(Point* request)
     ConfigurationFactory::get().recycle(aux);
     
     // -- Finally print what server has served the request ---------------------
-    std::cout << "\nRequest[" << t << "]: " << request->toString() << " served by #" 
+    std::cout << "Request[" << t << "]: " << request->toString() << " served by #" 
               << servant.getServerNumber() << std::endl; 
 }
 
@@ -70,8 +67,9 @@ void WorkFunctionAlgorithm::processRequest(Point* request)
  */
 range_t WorkFunctionAlgorithm::work(size_t index, Configuration* conf)
 {
+    size_t recursionDepth = _requests.size() - index;
     // -- If it is one, we process using utility function created. -------------
-    if (index == 1)
+    if (index == 1 || recursionDepth > _currentConf->size())
     {
         return workOnFirst(conf);
     } 
@@ -84,11 +82,8 @@ range_t WorkFunctionAlgorithm::work(size_t index, Configuration* conf)
     Configuration::Iterator it = conf->begin();
     range_t minDistance, actualDistance;
     Point& req = *_requests[index - 1];
-    
-    // -- First work function calculation --------------------------------------
-    Configuration* swapped = conf->newFromSwap(it, req);
-    minDistance = work(index - 1, swapped) + (*it).distance(req);
-    ConfigurationFactory::get().recycle(swapped);
+    Configuration* swapped;
+    minDistance = _limit;
     
     // -- The rest of the calculation ------------------------------------------
     for (; it != conf->end(); ++it)
@@ -104,4 +99,14 @@ range_t WorkFunctionAlgorithm::work(size_t index, Configuration* conf)
     // -- Return the min{ ... } calculated -------------------------------------
     return minDistance;
 }
+
+/**
+ * Update the limit still dunno how.
+ */
+void WorkFunctionAlgorithm::updateLimit()
+{
+    Point* lastReq = _requests.back();
+    
+}
+
 

@@ -19,19 +19,26 @@ class WorkFunctionAlgorithm
 
 public:
     
-    WorkFunctionAlgorithm();
+    //! Public constructor
+    WorkFunctionAlgorithm(range_t = 100.0);
     
+    //! Process a request
     void processRequest(Point* request);
     
 private:
     Configuration*      _currentConf;  //!< Current server configuation
     std::vector<Point*> _requests;     //!< Request arrived at current point
+    range_t             _limit;        //!< Superior limit for current request
     
     //! Calculate work function w(i, C)
     range_t work(size_t index, Configuration* conf);
     
     //! Calculate work function on first step w(1, C)
     range_t workOnFirst(Configuration* conf);  
+    
+    //! Update limit based on last request.
+    void updateLimit();
+    
 };
 
 /**

@@ -9,7 +9,6 @@
 
 #include <cstring>
 
-// TODO remove this
 #include <iostream> 
 #include "point_impl.h"
 
@@ -135,19 +134,3 @@ bool Configuration::operator==(const Configuration& other) const
     /// TODO Implement this method.
     return false;
 }
-
-void Configuration::print()
-{
-    if (_pointSize == 32)
-    {
-        Point3* ptr = reinterpret_cast<Point3*>(_servers);
-        std::cout << "C: ";
-        for (size_t i = 0; i < _serverCount; i++)
-        {
-            std::cout << ptr[i].toString() << " - ";
-        }
-        std::cout << std::endl;
-    }
-}
-
-

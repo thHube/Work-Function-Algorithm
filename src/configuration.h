@@ -65,8 +65,8 @@ public:
     //! Create a new configuation replacing (*it) with point
     Configuration* newFromSwap(const Iterator& it, const Point& point);
     
-    // TODO remove this
-    void print();
+    //! Return configuration size
+    size_t size();
     
 private:
     
@@ -83,5 +83,14 @@ private:
     //! Initialize the configuration from the given point. 
     void init(const Point& origin, size_t serverCount);
 };
+
+/**
+ * Getter for server count field
+ * @return the size in number of servers of the configuration.
+ */
+inline size_t Configuration::size()
+{
+    return _serverCount;
+}
 
 #endif // CONFIGURATION_H

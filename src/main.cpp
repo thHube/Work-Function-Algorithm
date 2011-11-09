@@ -26,7 +26,7 @@ void printHelpMessage()
 
 int main(int argc, char **argv) 
 {
-    if(argc < 3) 
+    if(argc < 4) 
     {
         printHelpMessage();
         return 1;
