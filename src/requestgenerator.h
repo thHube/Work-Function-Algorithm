@@ -38,7 +38,6 @@ private:
     
     //! Generate a random number. 
     range_t random(); 
-    
 };
 
 /**

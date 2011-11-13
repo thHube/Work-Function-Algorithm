@@ -20,7 +20,7 @@ class WorkFunctionAlgorithm
 public:
     
     //! Public constructor
-    WorkFunctionAlgorithm(range_t = 100.0);
+    WorkFunctionAlgorithm(range_t, Point*);
     
     //! Process a request
     void processRequest(Point* request);
@@ -29,15 +29,19 @@ private:
     Configuration*      _currentConf;  //!< Current server configuation
     std::vector<Point*> _requests;     //!< Request arrived at current point
     range_t             _limit;        //!< Superior limit for current request
+    Point*              _origin;       //!< Initial server position
     
     //! Calculate work function w(i, C)
-    range_t work(size_t index, Configuration* conf);
+    range_t work(size_t index, Configuration* conf, range_t up, range_t part);
     
     //! Calculate work function on first step w(1, C)
     range_t workOnFirst(Configuration* conf);  
     
     //! Update limit based on last request.
-    void updateLimit();
+    void updateLimit(Point& s);
+    
+    //! Calculate the distance from the origin of the actual configuation
+    range_t distanceFromOrigin(Configuration* conf);
     
 };
 
@@ -65,5 +69,22 @@ inline range_t WorkFunctionAlgorithm::workOnFirst(Configuration* conf)
     }
     return minDistance;
 }
+
+/**
+ * Calculate the distance from the initial configuation of the given configuation
+ * @param conf Actual configuration to calculate 
+ * @return Calculated distance 
+ */
+inline range_t WorkFunctionAlgorithm::distanceFromOrigin(Configuration* conf)
+{
+    Configuration::Iterator it = conf->begin();
+    range_t distance = 0.0;
+    for (; it != conf->end(); ++it)
+    {
+        distance += _origin->distance(*it);
+    }
+    return distance;
+}
+
 
 #endif // WORKFUNCTIONALGORITHM_H

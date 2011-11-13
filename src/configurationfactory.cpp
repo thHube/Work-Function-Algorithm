@@ -75,7 +75,7 @@ Configuration* ConfigurationFactory::createInitialConfiguration()
  */
 Configuration* ConfigurationFactory::create()
 {
-    if (_availableObj.empty())
+    if (_availableObj.size() == 0)
     {
         allocatePage();
     }

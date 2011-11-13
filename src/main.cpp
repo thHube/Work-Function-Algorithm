@@ -40,7 +40,8 @@ int main(int argc, char **argv)
     //  -- Init the request generator, algorithm class and allocator -----------
     RequestGenerator generator(requestCount);
     ConfigurationFactory::get().initAllocationData(Point3(), k, PAGE_SIZE);
-    WorkFunctionAlgorithm work;
+    Point3* origin = new Point3();
+    WorkFunctionAlgorithm work(200.0, origin);
     
     // -- Print some message ---------------------------------------------------
     switch(spaceSize)
@@ -66,5 +67,6 @@ int main(int argc, char **argv)
         delete req;
     }
     
+    delete origin;
     return 0;
 }

@@ -9,14 +9,17 @@
 #include <iostream>
 
 /**
+    
+    
  * Initialize the algorithm allocating the initial configuration.
  * @param limit The superior limit for first iteration. Should be greater 
  * that the eligble space. 
  */
-WorkFunctionAlgorithm::WorkFunctionAlgorithm(range_t limit)
+WorkFunctionAlgorithm::WorkFunctionAlgorithm(range_t limit, Point* origin)
 {
     _currentConf = ConfigurationFactory::get().createInitialConfiguration();
     _limit = limit;
+    _origin = origin;
 }
 
 /**
@@ -38,7 +41,9 @@ void WorkFunctionAlgorithm::processRequest(Point* request)
     {
         std::cout << " - " << it.getServerNumber() << std::endl;
         conf = _currentConf->newFromSwap(it, *request);
-        actualDistance = work(t - 1, conf) + (*it).distance(*request);
+        actualDistance = (*it).distance(*request);
+        
+        actualDistance += work(t - 1, conf, _limit + actualDistance, actualDistance);
         ConfigurationFactory::get().recycle(conf);
         
         if (actualDistance < minDistance)
@@ -47,6 +52,8 @@ void WorkFunctionAlgorithm::processRequest(Point* request)
             servant = it;
         }
     }
+    // -- Update limit ---------------------------------------------------------
+    updateLimit(*servant);
     
     // -- Update old configuration and recycle old -----------------------------
     Configuration* aux;
@@ -65,11 +72,13 @@ void WorkFunctionAlgorithm::processRequest(Point* request)
  * @param index Index to calculate the work function on
  * @param conf Current configuration
  */
-range_t WorkFunctionAlgorithm::work(size_t index, Configuration* conf)
+range_t WorkFunctionAlgorithm::work(size_t index, Configuration* conf, 
+                                    range_t upperBound, range_t partialSum)
 {
-    size_t recursionDepth = _requests.size() - index;
+    // TODO restore recurion clamp
+    // size_t recursionDepth = _requests.size() - index;
     // -- If it is one, we process using utility function created. -------------
-    if (index == 1 || recursionDepth > _currentConf->size())
+    if (index == 1) // || recursionDepth > _currentConf->size())
     {
         return workOnFirst(conf);
     } 
@@ -89,7 +98,14 @@ range_t WorkFunctionAlgorithm::work(size_t index, Configuration* conf)
     for (; it != conf->end(); ++it)
     {
         swapped = conf->newFromSwap(it, req);
-        actualDistance = work(index - 1, swapped) + (*it).distance(req);
+        actualDistance = (*it).distance(req);
+        
+        if (upperBound - partialSum < distanceFromOrigin(swapped))
+        {
+            continue;
+        }
+        
+        actualDistance += work(index - 1, swapped, upperBound, partialSum + actualDistance);
         if (actualDistance < minDistance)
         {
             minDistance = actualDistance;
@@ -101,12 +117,12 @@ range_t WorkFunctionAlgorithm::work(size_t index, Configuration* conf)
 }
 
 /**
- * Update the limit still dunno how.
+ * Update the limit with previos move of the server.
  */
-void WorkFunctionAlgorithm::updateLimit()
+void WorkFunctionAlgorithm::updateLimit(Point& servant)
 {
     Point* lastReq = _requests.back();
-    
+    _limit += lastReq->distance(servant);
 }
 
 

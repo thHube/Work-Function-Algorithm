@@ -36,7 +36,7 @@ Point& Configuration::Iterator::operator*() throw(IteratorOutOfBound)
 {
     if (_index < _outerPtr->_serverCount)
     {
-        _outerPtr->_servers + _index;
+        // _outerPtr->_servers + _index;
         char* auxPtr = reinterpret_cast<char*>(_outerPtr->_servers);
         auxPtr += _index * _outerPtr->_pointSize;
         return *reinterpret_cast<Point*>(auxPtr);
