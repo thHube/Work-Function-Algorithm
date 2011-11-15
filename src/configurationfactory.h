@@ -1,5 +1,5 @@
 /**
- * @author Alberto Franco
+ * @author Alberto Franco, Mirko Polato, Lorenzo Tessari
  * @file   configuationfactory.h
  * @brief  Contains the definition of the ConfigurationFactory class.
  *

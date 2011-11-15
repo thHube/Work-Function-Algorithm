@@ -1,5 +1,5 @@
 /** 
- * @author Alberto Franco
+ * @author Alberto Franco, Mirko Polato, Lorenzo Tessari
  * @file   configuation.h 
  * @brief  Contains the definition of the Configuration class.
  * 

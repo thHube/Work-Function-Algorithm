@@ -1,5 +1,5 @@
 /** 
- * @author Alberto Franco
+ * @author Alberto Franco, Mirko Polato, Lorenzo Tessari
  * @file   point.h 
  * @brief  Contains the definition of the Point interface. 
  * 

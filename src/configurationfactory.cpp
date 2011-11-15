@@ -1,5 +1,5 @@
 /** 
- * @author Alberto Franco
+ * @author Alberto Franco, Mirko Polato, Lorenzo Tessari
  * @file   configuationfactory.cpp
  * @brief  Contains the implementation of the ConfigurationFactory class.
  * 

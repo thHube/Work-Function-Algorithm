@@ -1,5 +1,5 @@
 /** 
- * @author Alberto Franco
+ * @author Alberto Franco, Mirko Polato, Lorenzo Tessari
  * @file   workfunctionalgorithm.h 
  * @brief  Contains the definition of the WorkFunctionAlgorithm class.
  * 

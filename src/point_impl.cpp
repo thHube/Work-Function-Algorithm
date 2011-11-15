@@ -1,5 +1,5 @@
 /** 
- * @author Alberto Franco
+ * @author Alberto Franco, Mirko Polato, Lorenzo Tessari
  * @file   point_impl.cpp
  * @brief  Contains the implementation of Point3 and Point2 classes. 
  * 

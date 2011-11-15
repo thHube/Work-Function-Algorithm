@@ -1,5 +1,5 @@
 /** 
- * @author Alberto Franco
+ * @author Alberto Franco, Mirko Polato, Lorenzo Tessari
  * @file   defs.h 
  * @brief  Contains the basic definition for the application to run.
  * 

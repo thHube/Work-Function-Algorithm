@@ -1,6 +1,6 @@
 # ---------------------------------------------------------------------------- #
 # -- Work Function Algorithm implementation in C++                          -- #
-# -- author: Alberto Franco                                                 -- #
+# -- author: Alberto Franco, Mirko Polato, Lorenzo Tessari                  -- #
 # -- file:   CMakeList.txt                                                  -- #
 # -- brief:  Makefile for the project. We use CMake project manager.        -- # 
 # ---------------------------------------------------------------------------- #

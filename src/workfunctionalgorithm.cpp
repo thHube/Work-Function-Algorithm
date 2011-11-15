@@ -1,5 +1,5 @@
 /** 
- * @author Alberto Franco
+ * @author Alberto Franco, Mirko Polato, Lorenzo Tessari
  * @file   workfunctionalgorithm.cpp
  * @brief  Contains the implementation of the WorkFunctionAlgorithm class.
  * 
@@ -9,8 +9,6 @@
 #include <iostream>
 
 /**
-    
-    
  * Initialize the algorithm allocating the initial configuration.
  * @param limit The superior limit for first iteration. Should be greater 
  * that the eligble space. 
@@ -75,10 +73,8 @@ void WorkFunctionAlgorithm::processRequest(Point* request)
 range_t WorkFunctionAlgorithm::work(size_t index, Configuration* conf, 
                                     range_t upperBound, range_t partialSum)
 {
-    // TODO restore recurion clamp
-    // size_t recursionDepth = _requests.size() - index;
     // -- If it is one, we process using utility function created. -------------
-    if (index == 1) // || recursionDepth > _currentConf->size())
+    if (index == 1) 
     {
         return workOnFirst(conf);
     } 
