@@ -10,13 +10,13 @@
 
 \section{Introduzione}    
 L'algoritmo \textsc{Work} rappresenta un notevole risultato nella ricerca
-legata al problema dei $k$-server. Questo algoritmo infatti permentte di 
+legata al problema dei $k$-server. Questo algoritmo infatti permette di 
 rispondere alle richieste del problema in modo $(2k - 1)$-competitivo che 
 non è il limite inferiore ma ci si avvicina molto. 
 
 Ci è stato chiesto di implementare questo algoritmo in modo efficiente, in 
 questo documento presentiamo l'implementazione data. Il pezzo di software che 
-è stato prodotto è stato scritto in C++ per la grande effificienza del 
+è stato prodotto è stato scritto in C++ per la grande efficienza del 
 linguaggio e la libertà che questo offre in termini di gestione delle risorse,
 come la memoria, ad esempio.
 
@@ -40,7 +40,7 @@ una programmazione) ad oggetti il più corretto possibile in modo da dare
 a chi usa la componente software una maggiore comprensione del modo in cui questa
 funziona. 
 
-In primo luogo la classe che gestice i punti in cui arrivano le 
+In primo luogo la classe che gestisce i punti in cui arrivano le 
 richieste è una classe che ha metodi tutti virtuali puri (una interfaccia 
 in altri linguaggi di programmazione, quali Java). In questo modo è possibile
 scrivere altre implementazioni della classe \texttt{Point} su altri spazi 
@@ -98,7 +98,7 @@ Per ottimizzare il calcolo del server che deve rispondere ad ogni richiesta
 è stata operata la modifica all'algoritmo originale descritta nella sezione
 ``Dettagli implementativi'' della dispensa. Ad ogni richiesta viene associato
 un limite superiore calcolato come $L_{sup} = w_{t - 1}(A_{t - 1}) + d(x_t, r_t)$ 
-dove $x_t$ è il server correntmente in analisi e $w_{t - 1}(A_{t - 1})$ è il
+dove $x_t$ è il server correntemente in analisi e $w_{t - 1}(A_{t - 1})$ è il
 costo pagato fino alla richiesta $t$-esima dall'algoritmo \textsc{Work}. Questo
 costo viene aggiornato dopo aver processato ogni richiesta. 
 
@@ -117,7 +117,7 @@ non è un compito semplice. Inizialmente abbiamo dovuto ragionare su quali
 fossero le componenti necessarie e, dopo aver isolato quello di cui 
 abbisognavamo abbiamo implementato il tutto. 
 
-La scelta del C++ come linguggio di implementazione è stata quasi ovvia. Una 
+La scelta del C++ come linguaggio di implementazione è stata quasi ovvia. Una 
 idea alternativa poteva essere Java ma questo non ci avrebbe permesso di 
 gestire la memoria così come è stato fatto.  
 
