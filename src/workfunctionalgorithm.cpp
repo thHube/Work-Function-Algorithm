@@ -37,7 +37,9 @@ void WorkFunctionAlgorithm::processRequest(Point* request)
     // -- Minimize distance work(t, conf) --------------------------------------
     for(it = _currentConf->begin(); it != _currentConf->end(); ++it)
     {
+#ifdef _DEBUG // -- Debug printing to understand what is going on --------------
         std::cout << " - " << it.getServerNumber() << std::endl;
+#endif // ----------------------------------------------------------------------
         conf = _currentConf->newFromSwap(it, *request);
         actualDistance = (*it).distance(*request);
         
