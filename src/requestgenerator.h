@@ -12,6 +12,10 @@
 #include <ctime>
 #include <cstdlib>
 
+#ifdef _MSC_VER
+    #include <random>
+#endif
+
 /**
  * 
  */
@@ -33,6 +37,10 @@ private:
     size_t _counter;  //!< Counter of how may request have been generated.
     size_t _randSeed; //!< Random seed
     
+#ifdef _MSC_VER 
+    std::mt19937 _generator;
+#endif 
+
     static range_t MAX_RANDOM;   //! Pitch random number
     static range_t RAND_OFFSET;  //! Offset of the random
     
@@ -46,10 +54,16 @@ private:
  */
 inline range_t RequestGenerator::random()
 {
+#ifdef _MSC_VER // -- Using features from TR1 
+    std::uniform_real_distribution<> dist(-50.0, 50.0);
+    double f = dist(_generator);
+#else
     std::srand(_randSeed);
-    _randSeed += 1;
     double f = (double)std::rand() / RAND_MAX;
-    return f * MAX_RANDOM - RAND_OFFSET; 
+    f = f * MAX_RANDOM - RAND_OFFSET;
+#endif
+    _randSeed += 1;
+    return f; 
 }
 
 

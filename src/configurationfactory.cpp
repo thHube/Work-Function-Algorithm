@@ -55,6 +55,7 @@ ConfigurationFactory::~ConfigurationFactory()
     {
         std::free(&_allObj[i]);
     }
+    delete[] _confInit;
 }
 
 /**
@@ -85,8 +86,8 @@ Configuration* ConfigurationFactory::create()
     // Set the pointer to the preallocated Point array.
     element->_servers     = reinterpret_cast<Point*>(element + 1);
     element->_serverCount = _confSize;
-    element->_pointSize   = _pointSize
-    ;
+    element->_pointSize   = _pointSize;
+
     std::memcpy(element->_servers, _confInit, _pointSize * _confSize);
     return element;
 }

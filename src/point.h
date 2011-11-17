@@ -33,25 +33,22 @@ public:
     virtual ~Point() { }
     
     //! Move current point to the given one. 
-    virtual void moveTo(const Point& other) = 0;
+    virtual void moveTo(const Point& other) { }
     
     //! Calculate the distance between two points. 
-    virtual range_t distance(const Point& other) = 0;
-    
-    //! Tells if the points are the same. 
-    virtual bool operator==(const Point& other) const = 0; 
+    virtual range_t distance(const Point& other) { return range_t();}
     
     //! Return point in a printable fromat.
-    virtual std::string toString() = 0;
+    virtual std::string toString() { return ""; }
     
 protected:
     
     //! Method for late initialization. Used instead of constructor for memory 
     //! optimization. 
-    virtual void init() = 0;
+    virtual void init() { }
     
     //! Copy constructor for late initialization. 
-    virtual void copy(const Point& other) = 0;
+    virtual void copy(const Point& other) { }
 };
 
 #endif // POINT_H

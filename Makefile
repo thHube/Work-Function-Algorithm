@@ -4,6 +4,7 @@
 # -- Brief:   Makefile for WORK project                                     -- #
 # ---------------------------------------------------------------------------- #
 CC=g++
+# CC=i586-mingw32msvc-c++ # -- TO compile from linux to windows ----------------
 FLAG=-Wall -O3
 
 TARGET="bin/work"
@@ -13,6 +14,5 @@ all:
 	$(CC) src/*.cpp $(FLAG) -o $(TARGET)
  
 clean:
-	rm $(TARGET)
 	rm -r bin
 

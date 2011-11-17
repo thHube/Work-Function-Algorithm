@@ -52,7 +52,7 @@ private:
     size_t                       _objPerPage;   //!< Number of objects per page.
     size_t                       _PAGE_SIZE;    //!< Page size in bytes
     Point*                       _origin;       //!< Point origin to init r_0
-    void*                        _confInit;     //!< An example initial conf 
+    Point*                       _confInit;     //!< An example initial conf 
 
     //! Defaul constructor initialize everthing.
     ConfigurationFactory();
@@ -84,9 +84,16 @@ ConfigurationFactory::initAllocationData(point_type origin, size_t serverCount, 
     _PAGE_SIZE = (_pointSize * _confSize + sizeof(Configuration)) * _objPerPage;
 
     _origin    = new point_type;
-    _confInit  = new point_type[_confSize];
     _origin->copy(origin);
     
+    point_type* aux;
+    _confInit  = aux = new point_type[_confSize];
+
+    for (size_t i = 0; i < _confSize; i++)
+    {
+        aux[i] = origin;
+    }
+
     allocatePage();
 }
 

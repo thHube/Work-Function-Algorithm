@@ -41,12 +41,12 @@ void WorkFunctionAlgorithm::processRequest(Point* request)
         std::cout << " - " << it.getServerNumber() << std::endl;
 #endif // ----------------------------------------------------------------------
         conf = _currentConf->newFromSwap(it, *request);
-        actualDistance = (*it).distance(*request);
+        actualDistance = request->distance(*it);
         
         actualDistance += work(t - 1, conf, _limit + actualDistance, actualDistance);
         ConfigurationFactory::get().recycle(conf);
         
-        if (actualDistance < minDistance)
+        if (actualDistance < minDistance || it.getServerNumber() == 0)
         {
             minDistance = actualDistance;
             servant = it;
@@ -96,7 +96,7 @@ range_t WorkFunctionAlgorithm::work(size_t index, Configuration* conf,
     for (; it != conf->end(); ++it)
     {
         swapped = conf->newFromSwap(it, req);
-        actualDistance = (*it).distance(req);
+        actualDistance = req.distance(*it);
         
         if (upperBound - partialSum < distanceFromOrigin(swapped))
         {

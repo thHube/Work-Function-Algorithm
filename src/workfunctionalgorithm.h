@@ -56,12 +56,12 @@ inline range_t WorkFunctionAlgorithm::workOnFirst(Configuration* conf)
     Configuration::Iterator it = conf->begin();
     range_t minDistance, actualDistance;
     
-    minDistance = (*it).distance(*_requests[0]);
+    minDistance = _requests[0]->distance(*it);
     ++it;
     
     for (; it != conf->end(); ++it) 
     {
-        actualDistance = (*it).distance(*_requests[0]);
+        actualDistance = _requests[0]->distance(*it);
         if (minDistance > actualDistance)
         {
             minDistance = actualDistance;

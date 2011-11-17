@@ -43,6 +43,9 @@ public:
         //! Dereferencing operator to access data. 
         Point& operator*() throw(IteratorOutOfBound);
         
+        //! Access the point for virtual calls in Windows
+        Point* operator->() throw(IteratorOutOfBound);
+
         //! Return the server number of the current iterator
         size_t getServerNumber() const { return _index; } 
         
@@ -91,6 +94,22 @@ private:
 inline size_t Configuration::size()
 {
     return _serverCount;
+}
+
+/**
+ * We should not need this function, it is a windows hack since 
+ * it seems to have problems managing virtual calls.
+ * @return the reference to the pointer.
+ */
+inline Point* Configuration::Iterator::operator->() throw(IteratorOutOfBound)
+{
+    if (_index < _outerPtr->_serverCount)
+    {
+        char* auxPtr = reinterpret_cast<char*>(_outerPtr->_servers);
+        auxPtr += _index * _outerPtr->_pointSize;
+        return reinterpret_cast<Point*>(auxPtr);
+    }
+    throw IteratorOutOfBound();
 }
 
 #endif // CONFIGURATION_H

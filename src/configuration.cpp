@@ -118,8 +118,11 @@ Configuration* Configuration::newFromSwap(const Configuration::Iterator& it, con
     char* auxPtr = reinterpret_cast<char*>(iterator) + it._index * _pointSize;
     
     // -- Copy memory and substitute the point ---------------------------------
-    iterator = reinterpret_cast<Point*>(auxPtr);
+    // iterator = reinterpret_cast<Point*>(auxPtr);
+    iterator = (Point*)(auxPtr);
     std::memcpy(neoConf->_servers, _servers, _pointSize * _serverCount);
+
+    // FIXME On windows call Point::copy not Point3::copy
     iterator->copy(point);
     
     return neoConf;

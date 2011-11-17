@@ -72,7 +72,8 @@ std::string Point2::toString()
  */
 void Point3::copy(const Point& other)
 {
-    const Point3* ptr = reinterpret_cast<const Point3*>(&other);
+    // const Point3* ptr = reinterpret_cast<const Point3*>(&other);
+    const Point3* ptr = (const Point3*)((char*)&other);
     if (ptr)
     {
         this->_x = ptr->_x;
@@ -91,7 +92,8 @@ void Point3::copy(const Point& other)
  */
 range_t Point3::distance(const Point& other)
 {
-    const Point3* ptr = reinterpret_cast<const Point3*>(&other);
+    // const Point3* ptr = reinterpret_cast<const Point3*>(&other);
+    const Point3* ptr = (const Point3*)((char*)&other);
     if (ptr)
     {
         range_t squareDistance = (ptr->_x - _x) * (ptr->_x - _x);
