@@ -30,7 +30,7 @@ file di configurazione è all'interno della directory radice, nella stessa
 cartella è presente un makefile per compilare l'applicazione. 
 
 Il software è stato testato su Linux a 64 bit con il compilatore GCC e in 
-ambiente Windows sempre a 64 bit su compilatore Microsoft Visual C++.
+ambiente Windows con compilatore Mingw GCC a 32 bit.
 
 \section{Sviluppo della applicazione}
 In questa sezione descriveremo brevemente quali sono state le scelte di design
@@ -110,6 +110,42 @@ se questa non è verificata allora proseguiamo a verificare il prossimo elemento
 senza scendere nelle chiamate ricorsive legate al calcolo di $w_i(A_i)$. Questo
 permette di eliminare un buon numero di chiamate ricorsive a \texttt{work}. 
 
+\section{Ulteriori Ottimizzazioni}
+Una idea iniziale era di migliorare l'efficienza dell'algoritmo usando una 
+finestra di dimensione $w$ controllando un numero costante di elementi 
+ad ogni richiesta. In pratica la variazione dell'algoritmo (chiamato $w$-WFA) 
+calcola la funzione lavoro all'iterazione $t$ partendo da $w_{w - t}$. Questa 
+ottimizzazione è già stata proposta in \cite{baumgartner}. In tale articolo 
+gli autori esibiscono una prova empirica del fatto che $w$-WFA preservi la 
+competitività di \textsc{WORK}, tale prova poco accettabile a livello matematico
+viene infatti smentita. Una prova della non-competitività di $w$-WFA è data in
+\cite{rudec}. Qui ne presentiamo una versione ridotta. 
+
+\paragraph{Teorema:} $w$-WFA non è $\alpha$-competitivo.\\
+\emph{Dimostrazione}. Per il caso in cui $w = 1$ la dimostrazione è banale dato
+che $1-$WFA è l'algoritmo \textsc{Greedy}. Ci limitiamo al caso $w \geq 2$.
+Sulla base di queste assunzioni costruiamo uno scenario che ci permette di 
+confutare la affermazione che $w$-WFA sia $\alpha$-competitivo. Il nostro 
+scenario è composto da una ``isola'' composta da due locazioni $x_1$ e $x_2$ e 
+da un ``entroterra'' in cui vi sono tutte le altre locazioni. Scegliamo una 
+sequenza di richieste in modo siano localizzate alternativamente in $x_1$ e 
+$x_2$, l'idea è che $w$-WFA muoverà solo i server sull'isola lasciando fermi 
+quelli nell'entroterra. Per dimostrare questo dividiamo in due casi:
+\begin{enumerate}
+    \item $1 \leq i \leq w$. In questo caso la funzione lavoro si comporta in 
+    modo canonico perciò in questa sezione l'algoritmo coincide con 
+    \textsc{Work} 
+    \item $i > w$. IN questa sezione l'algoritmo non tiene conto di tutte le 
+    richieste ma considera $r_{t - w + 1}$ come la prima richiesta. In questo 
+    caso l'algoritmo sceglie sempre una configurazione che muove solo i server 
+    che sono nell'isola perché il costo pagato per queste è minore rispetto a 
+    quella in cui un server dell'entroterra viene mosso sull'isola. 
+\end{enumerate}
+Se chiamiamo $\delta$ la distanza tra $x_1$ e $x_2$ e $\Delta$ la distanza tra 
+$x_1$ e la prima locazione dell'entroterra allora per una sequenza di richieste
+di lunghezza $n$ tale che $n > \Delta / \delta > w$ l'algoritmo diventa 
+non-competitivo.
+
 \section{Conclusioni}
 Passare dalla pura teoria a trovarsi di fronte a dover dare una implementazione 
 effettiva di un algoritmo così complesso e con così forte ricadute teoriche 
@@ -120,5 +156,8 @@ abbisognavamo abbiamo implementato il tutto.
 La scelta del C++ come linguaggio di implementazione è stata quasi ovvia. Una 
 idea alternativa poteva essere Java ma questo non ci avrebbe permesso di 
 gestire la memoria così come è stato fatto.  
+
+\bibliographystyle{alpha}
+\bibliography{ref}
 
 \end{document}
