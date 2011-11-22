@@ -5,7 +5,6 @@
  * 
  */
 #include "configurationfactory.h"
-
 #include <cstring>
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -83,12 +82,21 @@ Configuration* ConfigurationFactory::create()
     Configuration* element = _availableObj.top();
     _availableObj.pop();
     
-    // Set the pointer to the preallocated Point array.
+    // -- Set the pointer to the preallocated Point array ----------------------
     element->_servers     = reinterpret_cast<Point*>(element + 1);
     element->_serverCount = _confSize;
-    element->_pointSize   = _pointSize;
+    element->_pointSize   = _pointSize - sizeof(Point);
 
-    std::memcpy(element->_servers, _confInit, _pointSize * _confSize);
+    char* aux = reinterpret_cast<char*>(element->_servers);
+    // -- Size of point and calculated size of point are different -------------
+    for (size_t i = sizeof(Point) * _confSize, j = 0; i < _confSize * _pointSize; j++)
+    {
+        // -- Start from the end of points and create a correct configuration --
+        element->_servers[j]._coords = reinterpret_cast<range_t*>(aux + i);
+        element->_servers[j].copy(*_origin);
+        i += _pointSize - sizeof(Point);
+    }
+    
     return element;
 }
 

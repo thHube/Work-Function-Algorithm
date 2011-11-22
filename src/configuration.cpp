@@ -10,7 +10,6 @@
 #include <cstring>
 
 #include <iostream> 
-#include "point_impl.h"
 
 ////////////////////////////////////////////////////////////////////////////////
 //-- ITERATOR ------------------------------------------------------------------
@@ -36,10 +35,7 @@ Point& Configuration::Iterator::operator*() throw(IteratorOutOfBound)
 {
     if (_index < _outerPtr->_serverCount)
     {
-        // _outerPtr->_servers + _index;
-        char* auxPtr = reinterpret_cast<char*>(_outerPtr->_servers);
-        auxPtr += _index * _outerPtr->_pointSize;
-        return *reinterpret_cast<Point*>(auxPtr);
+        return _outerPtr->_servers[_index];
     }
     throw IteratorOutOfBound();
 }
@@ -94,14 +90,9 @@ Configuration::Iterator Configuration::end()
 void Configuration::init(const Point& origin, size_t serverCount)
 {
     _serverCount = serverCount;
-    
-    Point* iter  = _servers;
-    char* auxPtr = reinterpret_cast<char*>(iter);
     for (size_t i = 0; i < serverCount; i++) 
     {
-        iter = reinterpret_cast<Point*>(auxPtr);
-        iter->copy(origin);
-        auxPtr += _pointSize;
+        _servers[i].copy(origin);
     }
 }
 
@@ -114,17 +105,14 @@ void Configuration::init(const Point& origin, size_t serverCount)
 Configuration* Configuration::newFromSwap(const Configuration::Iterator& it, const Point& point)
 {
     Configuration* neoConf = ConfigurationFactory::get().create();
-    Point* iterator = neoConf->_servers;
-    char* auxPtr = reinterpret_cast<char*>(iterator) + it._index * _pointSize;
-    
     // -- Copy memory and substitute the point ---------------------------------
-    // iterator = reinterpret_cast<Point*>(auxPtr);
-    iterator = (Point*)(auxPtr);
-    std::memcpy(neoConf->_servers, _servers, _pointSize * _serverCount);
-
-    // FIXME On windows call Point::copy not Point3::copy
-    iterator->copy(point);
-    
+    for (size_t i = 0; i < _serverCount; i++)
+    {
+        if (i != it._index)
+            neoConf->_servers[i].copy(_servers[i]);
+        else 
+            neoConf->_servers[i].copy(point);
+    }
     return neoConf;
 }
 

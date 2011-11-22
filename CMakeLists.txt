@@ -14,7 +14,7 @@ set(TARGET_SRC
 "src/configurationfactory.cpp"  #! Class ConfigurationFactory
 "src/workfunctionalgorithm.cpp" #! Class WorkFunctionAlgorithm
 "src/requestgenerator.cpp"      #! Class RequestGenerator
-"src/point_impl.cpp")           #! Class Point3 and Point2
+"src/point.cpp")           #! Class Point3 and Point2
 
 # -- Target name for the project --
 set(EXEC_NAME "work") 

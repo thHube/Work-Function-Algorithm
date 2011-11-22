@@ -37,10 +37,12 @@ int main(int argc, char **argv)
     size_t requestCount = std::atoi(argv[2]);
     size_t spaceSize    = std::atoi(argv[3]);
     
+    Point::setPointSize(spaceSize);
+    
     //  -- Init the request generator, algorithm class and allocator -----------
+    Point* origin = new Point();
     RequestGenerator generator(requestCount);
-    ConfigurationFactory::get().initAllocationData(Point3(), k, PAGE_SIZE);
-    Point3* origin = new Point3();
+    ConfigurationFactory::get().initAllocationData(*origin, k, PAGE_SIZE);
     WorkFunctionAlgorithm work(200.0, origin);
     
     // -- Print some message ---------------------------------------------------
@@ -56,17 +58,20 @@ int main(int argc, char **argv)
     
     // -- Start processing requests --------------------------------------------
     Point* req;
+    std::vector<Point*> requests;
     for (size_t i = 0; i < requestCount; i++)
     {
-        if (spaceSize == 2)
-            req = generator.generatePoint2();
-        else
-            req = generator.generatePoint3();        
-        
+        req = generator.generatePoint();
         work.processRequest(req);
-        delete req;
+        requests.push_back(req);
     }
     
+    // -- Remove all requests --------------------------------------------------
+    std::vector<Point*>::iterator it;
+    for (it = requests.begin(); it != requests.end(); it++)
+    {
+        delete (*it);
+    }
     delete origin;
     return 0;
 }

@@ -7,7 +7,7 @@
 #ifndef REQUESTGENERATOR_H
 #define REQUESTGENERATOR_H
 
-#include "point_impl.h"
+#include "point.h"
 
 #include <ctime>
 #include <cstdlib>
@@ -28,10 +28,7 @@ public:
     RequestGenerator(size_t requestCount);
     
     //! Generate a two dimensional point.
-    Point2* generatePoint2();
-    
-    //! Generate a three dimensional point
-    Point3* generatePoint3();
+    Point* generatePoint();
     
 private:
     size_t _counter;  //!< Counter of how may request have been generated.

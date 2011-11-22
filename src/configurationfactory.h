@@ -28,8 +28,7 @@ public:
     static void release();
 
     //! Initialize the allocation data with the given.
-    template<typename point_type>
-    void initAllocationData(point_type origin, size_t serverCount, size_t pageSize);
+    void initAllocationData(Point origin, size_t serverCount, size_t pageSize);
 
     //! Create an initial configuration for k-server problem.
     Configuration* createInitialConfiguration();
@@ -74,26 +73,18 @@ private:
  * @param serverCount Number of server to create in each request.
  * @param pageSize Number of object to store in a page.
  */
-template <typename point_type> inline void
-ConfigurationFactory::initAllocationData(point_type origin, size_t serverCount, size_t pageSize)
+inline void
+ConfigurationFactory::initAllocationData(Point origin, size_t serverCount, size_t pageSize)
 {
     _confSize   = serverCount;
-    _pointSize  = sizeof(point_type);
+    _pointSize  = Point::getObjectSize();
     _objPerPage = pageSize;
 
     _PAGE_SIZE = (_pointSize * _confSize + sizeof(Configuration)) * _objPerPage;
 
-    _origin    = new point_type;
+    _origin    = new Point();
     _origin->copy(origin);
     
-    point_type* aux;
-    _confInit  = aux = new point_type[_confSize];
-
-    for (size_t i = 0; i < _confSize; i++)
-    {
-        aux[i] = origin;
-    }
-
     allocatePage();
 }
 

@@ -16,22 +16,21 @@ RequestGenerator::RequestGenerator(size_t reqCount):
     _counter(reqCount), _randSeed(std::time(NULL)) { }
 
 /**
- * Generate a random 2d point in space.
+ * Generate a random point in space.
  * @return the generated point.
  */     
-Point2* RequestGenerator::generatePoint2()
+Point* RequestGenerator::generatePoint()
 {
-    return new Point2(random(), random());
+    range_t* point = new range_t[Point::getPointSize()];
+    Point* newPt;
+    
+    for (size_t i = 0; i < Point::getPointSize(); i++)
+    {
+        point[i] = random();
+    }
+    newPt = new Point(point);
+    delete[] point;
+    
+    return newPt;
 }
-
-/**
- * Generate a random 3d point in our eligible space.
- * @return the new generated request.
- */
-Point3* RequestGenerator::generatePoint3()
-{
-    return new Point3(random(), random(), random());
-}
-
-
 

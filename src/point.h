@@ -29,26 +29,38 @@ class Point
     
 public:
     
-    //! Virtual Deconstructor.
-    virtual ~Point() { }
+    //! Set the size of the point (class-wide)
+    static void setPointSize(size_t size) { _pointSize = size; }
     
-    //! Move current point to the given one. 
-    virtual void moveTo(const Point& other) { }
+    //! Get the size of the point.
+    static size_t getPointSize() { return _pointSize; }
+    
+    //! Return the dimension in bytes of the point type.
+    static size_t getObjectSize() { return sizeof(range_t) * _pointSize +  sizeof(Point); }
+    
+    //! Create a new point with the given initializer.
+    Point(range_t* initializer = NULL, bool copy = true);
+    
+    //! Deconstructor.
+    ~Point() { delete _coords; }
     
     //! Calculate the distance between two points. 
-    virtual range_t distance(const Point& other) { return range_t();}
+    range_t distance(const Point& other);
     
     //! Return point in a printable fromat.
-    virtual std::string toString() { return ""; }
+    std::string toString();
     
-protected:
+private:
+    
+    static size_t       _pointSize;     //!< Dimension of the point.
+    range_t*            _coords;        //!< Coordinates of the point
     
     //! Method for late initialization. Used instead of constructor for memory 
     //! optimization. 
-    virtual void init() { }
+    void init();
     
     //! Copy constructor for late initialization. 
-    virtual void copy(const Point& other) { }
+    void copy(const Point& other);
 };
 
 #endif // POINT_H
