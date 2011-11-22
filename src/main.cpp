@@ -70,7 +70,7 @@ int main(int argc, char **argv)
     std::vector<Point*>::iterator it;
     for (it = requests.begin(); it != requests.end(); it++)
     {
-        delete (*it);
+        (*it)->dealloc();
     }
     delete origin;
     return 0;

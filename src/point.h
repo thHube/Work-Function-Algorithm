@@ -41,15 +41,15 @@ public:
     //! Create a new point with the given initializer.
     Point(range_t* initializer = NULL, bool copy = true);
     
-    //! Deconstructor.
-    ~Point() { delete _coords; }
-    
     //! Calculate the distance between two points. 
     range_t distance(const Point& other);
     
     //! Return point in a printable fromat.
     std::string toString();
     
+    //! Deallocate coordinates array 
+    void dealloc();
+
 private:
     
     static size_t       _pointSize;     //!< Dimension of the point.
@@ -62,5 +62,13 @@ private:
     //! Copy constructor for late initialization. 
     void copy(const Point& other);
 };
+
+/**
+ * Deallocate coordinates of the current point 
+ */
+inline void Point::dealloc() 
+{
+    delete[] _coords;
+}
 
 #endif // POINT_H
