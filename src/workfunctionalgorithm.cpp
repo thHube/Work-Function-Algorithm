@@ -98,8 +98,8 @@ range_t WorkFunctionAlgorithm::work(size_t index, Configuration* conf,
         swapped = conf->newFromSwap(it, req);
         actualDistance = req.distance(*it);
         
-        if (partialSum + actualDistance >= minDistance|| 
-			upperBound - partialSum < distanceFromOrigin(swapped))
+        if (partialSum + actualDistance >= minDistance || 
+                        upperBound - partialSum < distanceFromOrigin(swapped))
         {
             continue;
         }
