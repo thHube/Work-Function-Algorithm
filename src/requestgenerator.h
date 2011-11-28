@@ -9,6 +9,7 @@
 
 #include "point.h"
 
+#include <vector>
 #include <ctime>
 #include <cstdlib>
 
@@ -27,18 +28,25 @@ public:
     //! Init the request generator with the number of requests
     RequestGenerator(size_t requestCount);
     
+    //! Force a particualr request generation
+    void forceSpecialGeneration();
+    
     //! Generate a two dimensional point.
     Point* generatePoint();
     
 private:
-    size_t _counter;  //!< Counter of how may request have been generated.
-    size_t _randSeed; //!< Random seed
+    size_t   _counter;  //!< Counter of how may request have been generated.
+    size_t   _randSeed; //!< Random seed
+    
+    std::vector<Point>           _requestPoints; //!< Used for special requests 
+    std::vector<Point>::iterator _pointIterator; //!< Iterator to generate point
+    
     
 #ifdef _MSC_VER 
     std::mt19937 _generator;
 #endif 
 
-    static range_t MAX_RANDOM;   //! Pitch random number
+    static range_t MAX_RANDOM;   //! Random number pitch
     static range_t RAND_OFFSET;  //! Offset of the random
     
     //! Generate a random number. 
@@ -58,8 +66,8 @@ inline range_t RequestGenerator::random()
     std::srand(_randSeed);
     double f = (double)std::rand() / RAND_MAX;
     f = f * MAX_RANDOM - RAND_OFFSET;
-#endif
     _randSeed += 1;
+#endif
     return f; 
 }
 

@@ -17,11 +17,11 @@ void printHelpMessage()
 {
     std::cout << "Usage: work <k> <request count> [3 | 2]" << std::endl
               << "   <k> is the number of the k-server. It's number of server \n"
-              << "       that you want to be used by the solver."
+              << "       that you want to be used by the solver.\n"
               << "   <request count> is a integer number and represent how \n"
               << "       many request you want to generate for work.\n"
               << "   [3 | 2] three or two dimensional point to deal with. All\n"
-              << "       points are generated in the interval [-50.0, 50.0]";
+              << "       points are generated in the interval [-50.0, 50.0]\n";
 }
 
 int main(int argc, char **argv) 
@@ -38,10 +38,14 @@ int main(int argc, char **argv)
     size_t spaceSize    = std::atoi(argv[3]);
     
     Point::setPointSize(spaceSize);
+    RequestGenerator generator(requestCount);
+    
+    // -- TODO Remove this
+    generator.forceSpecialGeneration();
+    // -- end TODO 
     
     //  -- Init the request generator, algorithm class and allocator -----------
     Point* origin = new Point();
-    RequestGenerator generator(requestCount);
     ConfigurationFactory::get().initAllocationData(*origin, k, PAGE_SIZE);
     WorkFunctionAlgorithm work(200.0, origin);
     

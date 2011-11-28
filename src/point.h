@@ -50,6 +50,9 @@ public:
     //! Deallocate coordinates array 
     void dealloc();
 
+    //! Copy constructor for late initialization. 
+    void copy(const Point& other);
+    
 private:
     
     static size_t       _pointSize;     //!< Dimension of the point.
@@ -58,9 +61,6 @@ private:
     //! Method for late initialization. Used instead of constructor for memory 
     //! optimization. 
     void init();
-    
-    //! Copy constructor for late initialization. 
-    void copy(const Point& other);
 };
 
 /**

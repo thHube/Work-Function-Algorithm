@@ -1,0 +1,66 @@
+\documentclass[a4paper, 11pt]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[italian]{babel}
+
+\usepackage{amsmath}
+\usepackage{amsthm}
+
+\begin{document}
+
+\title{Una semplice prova della $(2k - 1)$-competitività di $\omega$-WFA}
+\maketitle
+
+Vogliamo mostrare come l'ottimizzazione dell'algoritmo \textsc{Work} con una 
+finestra di ricerca sia $(2k - 1)$-competitivo esattamente come l'algoritmo 
+originale modulo alcune assunzioni. In primo luogo considereremo uno spazio
+metrico finito, la cui distanza massima è $\Delta$ inoltre consideriamo una
+discretizzazione di questo spazio tale che la distanza minima tra le richieste
+si $\delta$. In generale queste assunzioni non sono limitanti dal momento che 
+le implementazioni effettive sul calcolatore hanno intrinsecamente queste 
+limitazioni.
+
+La prima scelta che operiamo è la dimensione della finestra. D'ora in avanti 
+chiameremo tale dimensione $\omega$ e l'algoritmo derivante $\omega$-WFA. 
+Scegliamo $\omega \geq \Delta/\delta$ e $\omega > k$. Dove $k$ è il numero di 
+server a disposizione. 
+
+Il nostro algoritmo andrà a calcolare la funzione lavoro esattamente nello 
+stesso modo in cui viene calcolata nell'algoritmo \textsc{Work} con la 
+differenza che alla richiesta $t$-esima:
+\[
+    work(t, A_t) = 
+    \left\{ \begin{array}{l l}
+        w_t(A_t) & \quad \text{se } t < \omega\\
+        w_\omega(A_t) & \quad \text{se } t \geq \omega \\
+    \end{array}\right.
+\]
+Considerate le premesse andremo a dimostrare il fatto che $\omega$-WFA è 
+$(2k - 1)$-competitivo basandoci sull'assunzione che \textsc{Work} lo sia
+perciò qualsiasi risultato migliore venga provato per \textsc{Work} si propaga
+all'ottimizzazione in analisi.
+
+\newtheorem{competitive}{Teorema}
+\begin{competitive}
+$\omega$-WFA è competitivo con lo stesso rapporto di competitività di 
+\textsc{Work}.
+\end{competitive}
+\begin{proof}
+Dividiamo la sequenza di richieste $R = \phi_0 \phi_1 ... \phi_n$ in fasi tali
+che ogni fase inizia quando OPT\footnote{L'algoritmo ottimo offline} muove un 
+server per rispondere ad una richiesta cioè paga almeno un costo $\delta$. 
+Tranne che per per $\phi_n$ in cui ci sono al massimo $k$ richieste distinte.
+Dividiamo l'analisi di una fase in due casi:
+\begin{itemize}
+    \item Se $|\phi_i| \leq \omega$ allora di sicuro $\omega$-WFA si comporta 
+    come \textsc{Work} perché calcola tutta la funzione lavoro fino all'inizio 
+    della fase. 
+    \item Se $|\phi_i| > \omega$ allora ci sono al più $k$ richieste distinte 
+    altrimenti avremmo che OPT muove un server. Essendo $\omega > k$ e 
+    $\omega \delta > \Delta$ allora non ci sono posizioni irraggiungibili da 
+    $\omega$-WFA che posizionerà i $k$ server nella stessa configurazione di
+    OPT con lo stesso rapporto di competitività di \textsc{Work}.
+\end{itemize}
+\end{proof}
+
+\end{document}
