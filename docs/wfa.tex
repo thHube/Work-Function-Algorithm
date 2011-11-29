@@ -40,27 +40,23 @@ $(2k - 1)$-competitivo basandoci sull'assunzione che \textsc{Work} lo sia
 perciò qualsiasi risultato migliore venga provato per \textsc{Work} si propaga
 all'ottimizzazione in analisi.
 
-\newtheorem{competitive}{Teorema}
-\begin{competitive}
-$\omega$-WFA è competitivo con lo stesso rapporto di competitività di 
-\textsc{Work}.
-\end{competitive}
+\newtheorem{reaching}{Lemma}
+\begin{reaching}
+Siano $\rho = r_1, ..., r_\omega$ richieste distinte. Allora
+\[
+    C_{\omega-\text{WFA}}(\rho) \leq C_{\text{OPT}}(\rho) + cost
+\]
+\end{reaching}
 \begin{proof}
-Dividiamo la sequenza di richieste $R = \phi_0 \phi_1 ... \phi_n$ in fasi tali
-che ogni fase inizia quando OPT\footnote{L'algoritmo ottimo offline} muove un 
-server per rispondere ad una richiesta cioè paga almeno un costo $\delta$. 
-Tranne che per per $\phi_n$ in cui ci sono al massimo $k$ richieste distinte.
-Dividiamo l'analisi di una fase in due casi:
-\begin{itemize}
-    \item Se $|\phi_i| \leq \omega$ allora di sicuro $\omega$-WFA si comporta 
-    come \textsc{Work} perché calcola tutta la funzione lavoro fino all'inizio 
-    della fase. 
-    \item Se $|\phi_i| > \omega$ allora ci sono al più $k$ richieste distinte 
-    altrimenti avremmo che OPT muove un server. Essendo $\omega > k$ e 
-    $\omega \delta > \Delta$ allora non ci sono posizioni irraggiungibili da 
-    $\omega$-WFA che posizionerà i $k$ server nella stessa configurazione di
-    OPT con lo stesso rapporto di competitività di \textsc{Work}.
-\end{itemize}
+Ovvio dalla definizione di $\omega$-WFA.
 \end{proof}
+Questo lemma ci dice che, se dividiamo in fasi lunghe $\omega$ la sequenza di 
+richieste (supponiamo siano $n$) alla fine sarà valida la disuquaglianza:
+\[
+    C_{\omega-\text{WFA}}(\rho) \leq C_{\text{OPT}}(\rho) + cost 
+\]
+la costante in questo caso sarà $cost \leq \Delta k n$. Dobbiamo dimostrare che 
+la costante non aumenta linearmente con il numero di fasi. In questo caso 
+l'algoritmo è competitivo come \textsc{Work}.
 
 \end{document}
