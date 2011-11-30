@@ -40,23 +40,49 @@ $(2k - 1)$-competitivo basandoci sull'assunzione che \textsc{Work} lo sia
 perciò qualsiasi risultato migliore venga provato per \textsc{Work} si propaga
 all'ottimizzazione in analisi.
 
-\newtheorem{reaching}{Lemma}
-\begin{reaching}
-Siano $\rho = r_1, ..., r_\omega$ richieste distinte. Allora
+Andiamo ad effettuare una analisi al caso peggiore sfruttando un esempio fornito
+da \cite{rudec}. Supponiamo la nostra configurazione sia la stessa. Abbiamo una 
+``isola'' composta dalle posizioni ammissibili $x_1, x_2$ in cui arrivano le 
+richieste con un server nella posizione $x_1$ (intercambiabilmente in $x_2$) 
+e un ``entroterra'' in cui vi sono tutti gli altri server a distanza $\Delta$. 
+e supponiamo di aver scelto $\omega = \Delta / \delta + 1$ allora alle prime 
+$\omega - 1$ richieste $\omega$-WFA paqherà un costo pari a $\delta \omega$ e 
+poi alla $w$-esima sposta un server dall'entroterra pagando un costo totale 
+$(\omega - 1)\delta + \Delta$ mentre OPT off-line paga un costo $\Delta$ 
+partendo dalla stessa configurazione. Perciò comparando i costi otteniamo che 
 \[
-    C_{\omega-\text{WFA}}(\rho) \leq C_{\text{OPT}}(\rho) + cost
+    \frac{(\omega - 1) \delta + \Delta}{\Delta} \leq (2k -1) \Rightarrow 
+    2  \leq (2k - 1)
 \]
-\end{reaching}
+Dunque anche nel peggiore degli scenari l'algoritmo paga un costo inferiore 
+a $(2k - 1)C_{OPT}$. Andiamo a dimostrare il caso generale, posta questa 
+condizione, per induzione.
+
+\newtheorem{competitivity}{Teorema}
+\begin{competitivity}
+$\omega$-WFA è $(2k - 1)$-competitivo.
+\end{competitivity}
 \begin{proof}
-Ovvio dalla definizione di $\omega$-WFA.
+Andiamo ad effettuare la dimostrazione per induzione sulla lunghezza della 
+richiesta riportandoci al fatto che \textsc{Work} è $(2k - 1)$-competitivo.
+\begin{itemize}
+    \item \emph{Caso base}. Per sequenze di richieste di lunghezza uno è banale
+    dato che i due algoritmi (\textsc{Work} e $\omega$-WFA) hanno lo stesso 
+    comportamento.
+    \item \emph{Passo induttivo}. Abbiamo una sequenza di richieste di lunghezza
+    $t > \omega$ (l'unico caso veramente interessate). Abbiamo dimostrato che 
+    l'algoritmo anche al caso peggiore è $(2k - 1)$-competitivo dunque la 
+    funzione lavoro verrà calcolata rispettando questo limite di competitività.
+    Al passo $t - 1$ l'algoritmo calcola $w_\omega(A_{t-1})$ in modo competitivo
+    allora, per ipotesi induttiva anche al passo $t$ è competitivo perché calcola
+    $w_\omega(A_t) = w_\omega(A_{t-1}) + d(r_t, x)$ rispettando il vincolo 
+    imposto dall'analisi al caso peggiore.
+    
+\end{itemize}
+Questo conclude la dimostrazione.
 \end{proof}
-Questo lemma ci dice che, se dividiamo in fasi lunghe $\omega$ la sequenza di 
-richieste (supponiamo siano $n$) alla fine sarà valida la disuquaglianza:
-\[
-    C_{\omega-\text{WFA}}(\rho) \leq C_{\text{OPT}}(\rho) + cost 
-\]
-la costante in questo caso sarà $cost \leq \Delta k n$. Dobbiamo dimostrare che 
-la costante non aumenta linearmente con il numero di fasi. In questo caso 
-l'algoritmo è competitivo come \textsc{Work}.
+
+\bibliographystyle{alpha}
+\bibliography{ref}
 
 \end{document}
