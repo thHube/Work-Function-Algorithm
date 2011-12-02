@@ -31,6 +31,11 @@ private:
     range_t             _limit;        //!< Superior limit for current request
     Point*              _origin;       //!< Initial server position
     
+    size_t              _callCount;    //!< Total number of call to work 
+    size_t              _skippedCalls; //!< Total number of call skipped
+    size_t              _currentCall;  //!< Number of call in current iteration
+    size_t              _currentSkip;  //!< Number of skipped call in current
+    
     //! Calculate work function w(i, C)
     range_t work(size_t index, Configuration* conf, range_t up, range_t part);
     

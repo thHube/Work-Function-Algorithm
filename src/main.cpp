@@ -40,6 +40,8 @@ int main(int argc, char **argv)
     Point::setPointSize(spaceSize);
     RequestGenerator generator(requestCount);
     
+    // generator.forceSpecialGeneration();
+    
     //  -- Init the request generator, algorithm class and allocator -----------
     Point* origin = new Point();
     ConfigurationFactory::get().initAllocationData(*origin, k, PAGE_SIZE);

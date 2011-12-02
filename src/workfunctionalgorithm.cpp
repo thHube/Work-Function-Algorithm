@@ -18,6 +18,8 @@ WorkFunctionAlgorithm::WorkFunctionAlgorithm(range_t limit, Point* origin)
     _currentConf = ConfigurationFactory::get().createInitialConfiguration();
     _limit = limit;
     _origin = origin;
+    _callCount = 0;
+    _skippedCalls = 0;
 }
 
 /**
@@ -26,6 +28,7 @@ WorkFunctionAlgorithm::WorkFunctionAlgorithm(range_t limit, Point* origin)
  */
 void WorkFunctionAlgorithm::processRequest(Point* request)
 {
+    _currentCall = _currentSkip = 0;
     // -- Push back request and init variables ---------------------------------
     _requests.push_back(request);
     size_t t = _requests.size();
@@ -63,8 +66,12 @@ void WorkFunctionAlgorithm::processRequest(Point* request)
     ConfigurationFactory::get().recycle(aux);
     
     // -- Finally print what server has served the request ---------------------
-    std::cout << "Request[" << t << "]: " << request->toString() << " served by #" 
-              << servant.getServerNumber() << std::endl; 
+    std::cout << "Request[" << t << "] served by #" << servant.getServerNumber()  
+              << " - "<< request->toString() << std::endl; 
+    std::cout << "In this iteration [call]/skipped]: (" << _currentCall << "/"
+              << _currentSkip << ")" << std::endl;
+    std::cout << "Total [call/skipped]: (" << _callCount << "/"
+              << _skippedCalls << ")" << std::endl ;
 }
 
 /**
@@ -75,6 +82,8 @@ void WorkFunctionAlgorithm::processRequest(Point* request)
 range_t WorkFunctionAlgorithm::work(size_t index, Configuration* conf, 
                                     range_t upperBound, range_t partialSum)
 {
+    _callCount   += 1;
+    _currentCall += 1;
     // -- If it is one, we process using utility function created. -------------
     if (index == 1) 
     {
@@ -101,6 +110,8 @@ range_t WorkFunctionAlgorithm::work(size_t index, Configuration* conf,
         if (partialSum + actualDistance >= minDistance || 
                         upperBound - partialSum < distanceFromOrigin(swapped))
         {
+            _currentSkip  += 1;
+            _skippedCalls += 1;
             continue;
         }
         
