@@ -2,6 +2,8 @@
 
 \usepackage[italian]{babel}
 \usepackage[utf8]{inputenc}
+\usepackage{amsthm}
+\usepackage{amsmath}
 
 \begin{document}
     \title{Relazione sull'implementazione dell'algoritmo \textsc{Work}}
@@ -30,7 +32,8 @@ file di configurazione è all'interno della directory radice, nella stessa
 cartella è presente un makefile per compilare l'applicazione. 
 
 Il software è stato testato su Linux a 64 bit con il compilatore GCC e in 
-ambiente Windows con compilatore Mingw GCC a 32 bit.
+ambiente Windows con compilatore Mingw GCC a 32 bit e Microsoft Visual C++
+sia a 32 che a 64 bit.
 
 \section{Sviluppo della applicazione}
 In questa sezione descriveremo brevemente quali sono state le scelte di design
@@ -40,22 +43,18 @@ una programmazione) ad oggetti il più corretto possibile in modo da dare
 a chi usa la componente software una maggiore comprensione del modo in cui questa
 funziona. 
 
-In primo luogo la classe che gestisce i punti in cui arrivano le 
-richieste è una classe che ha metodi tutti virtuali puri (una interfaccia 
-in altri linguaggi di programmazione, quali Java). In questo modo è possibile
-scrivere altre implementazioni della classe \texttt{Point} su altri spazi 
-metrici e il tutto resta coerente e corretto. A questo scopo è stato anche 
-parametrizzato il tipo ``distanza'' in modo che si possa sostituire con un 
-altra e la componente software continua a funzionare\footnote{Questo è stato 
-fatto con un \texttt{typedef}, il tipo che può essere sostituito è 
-\texttt{range\_t}.}.
-
-La seconda scelta di design operata è stato di permettere agli utenti della 
+Si è scelto di permettere agli utenti della 
 classe \texttt{Configuration} di scorrere gli elementi della configurazione
 tramite un iteratore invece che dare accesso diretto alla memoria sottostante.
 Questo permette una gestione più elegante dell'iterazione di una configurazione
 e successive modifiche nella gestione interna non modificherebbero il codice
 utente già scritto. 
+
+A scopo di test dell'algoritmo si è deciso di usare un generatore di richieste
+casuali (la classe \texttt{RequestGenerator}) che genera in modo uniforme le 
+richieste nell'intervallo $[-50, 50]$. L'utente può decidere al momento 
+dell'avvio della applicazione la dimensione dello spazio in cui queste richieste
+verranno generate. 
 
 Nelle sotto sezioni successive verranno presentate le ottimizzazioni operate
 per rendere l'esecuzione più veloce. 
@@ -113,38 +112,83 @@ permette di eliminare un buon numero di chiamate ricorsive a \texttt{work}.
 \section{Ulteriori Ottimizzazioni}
 Una idea iniziale era di migliorare l'efficienza dell'algoritmo usando una 
 finestra di dimensione $w$ controllando un numero costante di elementi 
-ad ogni richiesta. In pratica la variazione dell'algoritmo (chiamato $w$-WFA) 
-calcola la funzione lavoro all'iterazione $t$ partendo da $w_{w - t}$. Questa 
+ad ogni richiesta. In pratica la variazione dell'algoritmo (chiamato $\omega$-WFA) 
+calcola la funzione lavoro all'iterazione $t$ partendo da $w_{\omega - t}$. Questa 
 ottimizzazione è già stata proposta in \cite{baumgartner}. In tale articolo 
-gli autori esibiscono una prova empirica del fatto che $w$-WFA preservi la 
+gli autori esibiscono una prova empirica del fatto che $\omega$-WFA preservi la 
 competitività di \textsc{WORK}, tale prova poco accettabile a livello matematico
-viene infatti smentita. Una prova della non-competitività di $w$-WFA è data in
+viene infatti smentita. Una prova della non-competitività di $\omega$-WFA è data in
 \cite{rudec}. Qui ne presentiamo una versione ridotta. 
 
-\paragraph{Teorema:} $w$-WFA non è $\alpha$-competitivo.\\
-\emph{Dimostrazione}. Per il caso in cui $w = 1$ la dimostrazione è banale dato
-che $1-$WFA è l'algoritmo \textsc{Greedy}. Ci limitiamo al caso $w \geq 2$.
+\newtheorem{noncomp}{Teorema} 
+\begin{noncomp}
+$\omega$-WFA non è $\alpha$-competitivo.
+\end{noncomp}
+\begin{proof}
+Per il caso in cui $\omega = 1$ la dimostrazione è banale dato
+che $1-$WFA è l'algoritmo \textsc{Greedy}. Ci limitiamo al caso $\omega \geq 2$.
 Sulla base di queste assunzioni costruiamo uno scenario che ci permette di 
-confutare la affermazione che $w$-WFA sia $\alpha$-competitivo. Il nostro 
+confutare la affermazione che $\omega$-WFA sia $\alpha$-competitivo. Il nostro 
 scenario è composto da una ``isola'' composta da due locazioni $x_1$ e $x_2$ e 
 da un ``entroterra'' in cui vi sono tutte le altre locazioni. Scegliamo una 
 sequenza di richieste in modo siano localizzate alternativamente in $x_1$ e 
-$x_2$, l'idea è che $w$-WFA muoverà solo i server sull'isola lasciando fermi 
+$x_2$, l'idea è che $\omega$-WFA muoverà solo i server sull'isola lasciando fermi 
 quelli nell'entroterra. Per dimostrare questo dividiamo in due casi:
 \begin{enumerate}
-    \item $1 \leq i \leq w$. In questo caso la funzione lavoro si comporta in 
+    \item $1 \leq i \leq \omega$. In questo caso la funzione lavoro si comporta in 
     modo canonico perciò in questa sezione l'algoritmo coincide con 
     \textsc{Work} 
-    \item $i > w$. IN questa sezione l'algoritmo non tiene conto di tutte le 
-    richieste ma considera $r_{t - w + 1}$ come la prima richiesta. In questo 
+    \item $i > \omega$. IN questa sezione l'algoritmo non tiene conto di tutte le 
+    richieste ma considera $r_{t - \omega + 1}$ come la prima richiesta. In questo 
     caso l'algoritmo sceglie sempre una configurazione che muove solo i server 
     che sono nell'isola perché il costo pagato per queste è minore rispetto a 
     quella in cui un server dell'entroterra viene mosso sull'isola. 
 \end{enumerate}
 Se chiamiamo $\delta$ la distanza tra $x_1$ e $x_2$ e $\Delta$ la distanza tra 
 $x_1$ e la prima locazione dell'entroterra allora per una sequenza di richieste
-di lunghezza $n$ tale che $n > \Delta / \delta > w$ l'algoritmo diventa 
+di lunghezza $n$ tale che $n > \Delta / \delta > \omega$ l'algoritmo diventa 
 non-competitivo.
+\end{proof}
+
+Una supposizione ragionevole è che questa ottimizzazione non funzioni per spazi
+metrici qualsiasi ma con le dovute restrizioni la competitività venga preservata.
+In primo luogo considereremo uno spazio
+metrico finito, la cui distanza massima è $\Delta$ inoltre consideriamo una
+discretizzazione di questo spazio tale che la distanza minima tra le richieste
+sia $\delta$. In generale queste assunzioni non sono limitanti dal momento che 
+le implementazioni effettive sul calcolatore hanno intrinsecamente queste 
+limitazioni.
+
+La prima scelta che operiamo è la dimensione della finestra. 
+Scegliamo $\omega > \Delta/\delta$ e $\omega > k$. Dove $k$ è il numero di 
+server a disposizione\footnote{In generale un valore di $\omega$ ragionevole
+è $\omega = \Delta / \delta + 1$}. 
+
+Il nostro algoritmo andrà a calcolare la funzione lavoro esattamente nello 
+stesso modo in cui viene calcolata nell'algoritmo \textsc{Work} con la 
+differenza che alla richiesta $t$-esima:
+\[
+    work(t, A_t) = 
+    \left\{ \begin{array}{l l}
+        w_t(A_t) & \quad \text{se } t < \omega\\
+        w_\omega(A_t) & \quad \text{se } t \geq \omega \\
+    \end{array}\right.
+\]
+Andiamo ad effettuare una analisi all'esempio fornito
+da \cite{rudec}. Supponiamo la nostra configurazione sia la stessa. Abbiamo una 
+``isola'' composta dalle posizioni ammissibili $x_1, x_2$ in cui arrivano le 
+richieste con un server nella posizione $x_1$ (intercambiabilmente in $x_2$) 
+e un ``entroterra'' in cui vi sono tutti gli altri server a distanza $\Delta$. 
+e supponiamo di aver scelto $\omega = \Delta / \delta + 1$ allora alle prime 
+$\omega - 1$ richieste $\omega$-WFA paqherà un costo pari a $\delta \omega$ e 
+poi alla $w$-esima sposta un server dall'entroterra pagando un costo totale 
+$(\omega - 1)\delta + \Delta$ mentre OPT off-line paga un costo $\Delta$ 
+partendo dalla stessa configurazione. Perciò comparando i costi otteniamo che 
+\[
+    \frac{(\omega - 1) \delta + \Delta}{\Delta} \leq (2k -1) \Rightarrow 
+    2  \leq (2k - 1)
+\]
+Dunque in questo scenario l'algoritmo paga un costo inferiore a $(2k - 1)C_{OPT}$. 
 
 \section{Conclusioni}
 Passare dalla pura teoria a trovarsi di fronte a dover dare una implementazione 

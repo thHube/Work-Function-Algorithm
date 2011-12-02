@@ -40,7 +40,7 @@ $(2k - 1)$-competitivo basandoci sull'assunzione che \textsc{Work} lo sia
 perciò qualsiasi risultato migliore venga provato per \textsc{Work} si propaga
 all'ottimizzazione in analisi.
 
-Andiamo ad effettuare una analisi al caso peggiore sfruttando un esempio fornito
+Andiamo ad effettuare una analisi all'esempio fornito
 da \cite{rudec}. Supponiamo la nostra configurazione sia la stessa. Abbiamo una 
 ``isola'' composta dalle posizioni ammissibili $x_1, x_2$ in cui arrivano le 
 richieste con un server nella posizione $x_1$ (intercambiabilmente in $x_2$) 
@@ -54,9 +54,8 @@ partendo dalla stessa configurazione. Perciò comparando i costi otteniamo che
     \frac{(\omega - 1) \delta + \Delta}{\Delta} \leq (2k -1) \Rightarrow 
     2  \leq (2k - 1)
 \]
-Dunque anche nel peggiore degli scenari l'algoritmo paga un costo inferiore 
-a $(2k - 1)C_{OPT}$. Andiamo a dimostrare il caso generale, posta questa 
-condizione, per induzione.
+Dunque anche in questo scenario l'algoritmo paga un costo inferiore 
+a $(2k - 1)C_{OPT}$. 
 
 \newtheorem{competitivity}{Teorema}
 \begin{competitivity}
